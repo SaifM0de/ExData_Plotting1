@@ -1,0 +1,11 @@
+library(dplyr)
+data <- read.csv('household_power_consumption.txt', sep = ';', stringsAsFactors = FALSE)
+data$Time <- paste(data$Date, data$Time)
+data$Time <- as.POSIXct(strptime(data$Time, format = "%d/%m/%Y %H:%M:%S"))
+data$Date <- as.Date(data$Date, format = "%d/%m/%Y")
+sub <- data %>% filter(Date == '2007-02-01' | Date == '2007-02-02')
+png('plot2.png')
+with(sub, plot(Time, as.numeric(Global_active_power), type = 'n', 
+               xlab = '', ylab = 'Global Active Power (kilowatts)'))
+lines(sub$Time, as.numeric(sub$Global_active_power))
+dev.off()
